@@ -3,8 +3,8 @@ import { gql } from "apollo-boost";
 import { Query } from "react-apollo";
 
 const GET_ORGANIZATION = gql`
-  {
-    users(tutorial_id: 2) {
+  query rishabh($id: Int!) {
+    users(tutorial_id: $id) {
       tutorial_id
       tutorial_title
     }
@@ -13,9 +13,14 @@ const GET_ORGANIZATION = gql`
 
 class App extends Component {
   render() {
-    console.log(this.props);
+    console.log(this.props.id);
     return (
-      <Query query={GET_ORGANIZATION}>
+      <Query
+        query={GET_ORGANIZATION}
+        variables={{ id: this.props.id }}
+        skip={!this.props.id}
+        pollInterval={500}
+      >
         {({ loading, error, data }) => {
           console.log(data);
           if (loading) return <p>Loading...</p>;
